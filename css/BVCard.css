@@ -1,0 +1,204 @@
+/*
+ * 主题令牌只声明在 #biliVideoCard 上，避免污染 B 站页面的全局变量。
+ * 浅色为默认值，深色由 prefers-color-scheme 媒体查询覆盖。
+ * content script 在 document_start 注入，纯 CSS 切换不会出现 JS 换肤的闪白。
+ */
+#biliVideoCard {
+    /* 底色与浮层 */
+    --bvi-card-bg: #ffffff;
+    --bvi-card-surface: #f5f5f7;
+
+    /* 文字 */
+    --bvi-card-text: #1f1f23;
+    --bvi-card-text-secondary: #888888;
+
+    /* 边框与阴影 */
+    --bvi-card-border: rgba(0, 0, 0, 0.06);
+    --bvi-card-shadow: 0 0 25px rgba(0, 0, 0, 0.221);
+
+    /* 品牌粉 */
+    --bvi-accent: #fb7299;
+    --bvi-accent-soft: #ffb9cd;
+
+    /* 标签 */
+    --bvi-tag-bg: #00aeec;
+    --bvi-tag-text: #ffffff;
+    --bvi-tag-border: transparent;
+
+    /* 类型前的 # 徽标 */
+    --bvi-badge-bg: #ffcf0e;
+    --bvi-badge-text: #ffffff;
+
+    color-scheme: light dark;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 400px;
+    box-sizing: border-box;
+    border: 1px solid var(--bvi-card-border);
+    border-radius: 15px;
+    background-color: var(--bvi-card-bg);
+    color: var(--bvi-card-text);
+    box-shadow: var(--bvi-card-shadow);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease-in-out 1; /* 使用动画 */
+}
+
+/* 深色：低透明度大扩散阴影 + 1px 描边，避免亮色描边/发光的廉价感 */
+@media (prefers-color-scheme: dark) {
+    #biliVideoCard {
+        --bvi-card-bg: #1e1e22;
+        --bvi-card-surface: #26262c;
+        --bvi-card-text: #e8e8ec;
+        --bvi-card-text-secondary: #a8a8b3;
+        --bvi-card-border: rgba(255, 255, 255, 0.10);
+        --bvi-card-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+        --bvi-accent: #ff8fb0;
+        --bvi-accent-soft: #ffa8c4;
+        --bvi-tag-bg: rgba(0, 174, 236, 0.16);
+        --bvi-tag-text: #8fd9f7;
+        --bvi-tag-border: rgba(0, 174, 236, 0.35);
+        --bvi-badge-bg: #ffcf0e;
+        --bvi-badge-text: #1e1e22;
+    }
+}
+
+#biliVideoCard #video-card {
+    padding: 30px;
+}
+
+#biliVideoCard #video-card #card-title {
+    display: flex;
+    flex-direction: column;
+    /*align-items: flex-start;*/
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#biliVideoCard #video-card #card-title #type {
+    margin-bottom: 5px;
+    text-align: right;
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--bvi-accent-soft);
+    /*padding: 4px 8px;*/
+    border-radius: 5px;
+}
+
+#biliVideoCard #video-card #card-title #type span {
+    text-align: right;
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--bvi-badge-text);
+    background-color: var(--bvi-badge-bg);
+    border-radius: 5px;
+}
+
+#biliVideoCard #video-card #title {
+    font-size: 18px;
+    line-height: 1.2;
+    color: var(--bvi-accent);
+}
+
+/* 发布日期：使用次文字色，不抢标题视觉权重 */
+#biliVideoCard #video-card #card-title #publish-date {
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: normal;
+    color: var(--bvi-card-text-secondary);
+    letter-spacing: 0.2px;
+}
+
+#biliVideoCard #video-card #card-title #publish-date time {
+    font-variant-numeric: tabular-nums;
+}
+
+#biliVideoCard #video-card #desc {
+    font-size: 16px;
+    color: var(--bvi-card-text-secondary);
+    padding: 10px;
+    line-height: 1.2;
+}
+
+#biliVideoCard #video-card #card-content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+#biliVideoCard #video-card #card-content #tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+#biliVideoCard #video-card #card-content #tag-list #tag {
+    background-color: var(--bvi-tag-bg);
+    color: var(--bvi-tag-text);
+    border: 1px solid var(--bvi-tag-border);
+    padding: 4px 4px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+#biliVideoCard #video-card #card-content #card-content-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
+    margin-top: auto;
+    /* 将内容推至底部 */
+}
+
+#biliVideoCard #video-card #card-content #card-content-bottom .card-content-bottom-detail {
+    width: calc(50% - 5px);
+    /* 每个元素占50%宽度，并考虑间隔 */
+    border-radius: 5px;
+    padding: 3px;
+    box-sizing: border-box;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+/* 深色下给数据行一个次级底色，和卡片底色拉开层次 */
+@media (prefers-color-scheme: dark) {
+    #biliVideoCard #video-card #card-content #card-content-bottom .card-content-bottom-detail {
+        background-color: var(--bvi-card-surface);
+    }
+}
+
+/* 若后续加入封面图，1px 描边可防止封面融入卡片背景 */
+#biliVideoCard img {
+    border: 1px solid var(--bvi-card-border);
+    border-radius: 8px;
+}
+
+.none-display {
+    display: none;
+}
+.flex-display {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 1;
+    }
+}

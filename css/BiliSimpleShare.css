@@ -1,0 +1,119 @@
+/*
+ * 分享按钮与复制提示共用一组主题令牌。
+ * 令牌只声明在扩展自己的节点上，避免影响 B 站页面。
+ */
+#biliSimple-share-button,
+#biliSimple-share-pop {
+    color-scheme: light dark;
+
+    --bvi-share-idle-bg: #ffd9e4;
+    --bvi-share-idle-text: #ffd9e4;
+    --bvi-share-hover-bg: #fb7299;
+    --bvi-share-hover-text: #ffffff;
+
+    --bvi-toast-bg: #fb7299;
+    --bvi-toast-text: #ffffff;
+    --bvi-toast-border: transparent;
+    --bvi-toast-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.356);
+}
+
+/* 深色：降低品牌粉饱和度，文字改用亮色/深色对比，避免粉底白字糊成一片 */
+@media (prefers-color-scheme: dark) {
+    #biliSimple-share-button,
+    #biliSimple-share-pop {
+        --bvi-share-idle-bg: #4a3038;
+        --bvi-share-idle-text: #d9a7b6;
+        --bvi-share-hover-bg: #b34f6a;
+        --bvi-share-hover-text: #fff3f6;
+
+        --bvi-toast-bg: #3a2a31;
+        --bvi-toast-text: #ffd9e4;
+        --bvi-toast-border: rgba(251, 114, 153, 0.35);
+        --bvi-toast-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+    }
+}
+
+#biliSimple-share-button {
+    position: absolute;
+    width: 1.5vw;
+    height: 1.5vw;
+
+    left: -1.5vw;
+    top: 18vh;
+
+    font-size: 5px;
+    font-weight: bold;
+    margin: 0px 0px 0px 8px;
+    padding: 3px;
+    color: var(--bvi-share-idle-text);
+    background-color: var(--bvi-share-idle-bg);
+    border-radius: 50%;
+
+    border: none;
+
+    transition: all 0.3s ease-in-out;
+}
+
+#biliSimple-share-button:hover {
+    transform: translateX(30%);
+    width: 3vw;
+    height: 3vw;
+
+    font-size: 15px;
+
+    border-radius: 30%;
+    background-color: var(--bvi-share-hover-bg);
+    color: var(--bvi-share-hover-text);
+}
+
+#biliSimple-share-button:active {
+    transform: translateX(30%) scale(0.94);
+    filter: brightness(0.92);
+}
+
+#biliSimple-share-button:focus-visible {
+    outline: 2px solid var(--bvi-share-hover-bg);
+    outline-offset: 2px;
+}
+
+#biliSimple-share-pop {
+    font-size: 20px;
+    line-height: 1.5;
+
+    position: absolute;
+    top: 8vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1020;
+
+    box-sizing: border-box;
+    border: 1px solid var(--bvi-toast-border);
+    box-shadow: var(--bvi-toast-shadow);
+
+    text-align: center;
+    vertical-align: middle;
+
+    color: var(--bvi-toast-text);
+    background-color: var(--bvi-toast-bg);
+
+    padding: 20px;
+
+    border-radius: 10px;
+
+    animation: fadeInOut 2s ease-in-out 1; /* 使用动画 */
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
